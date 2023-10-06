@@ -11,7 +11,7 @@ import (
 func main() {
 	// Initialize the URL shortener with in-memory storage and Redis cache.
 	storage := controller.NewMemoryStorage()
-	redisCache, err := controller.NewRedisCache("redis://localhost:6379")
+	redisCache, err := controller.NewRedisCache("my-redis-container:6379")
 	if err != nil {
 		log.Fatalf("Failed to initialize Redis cache: %v", err)
 	}
