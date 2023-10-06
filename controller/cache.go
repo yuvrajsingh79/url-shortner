@@ -36,7 +36,6 @@ func NewRedisCache(redisAddr string) (*RedisCache, error) {
 
 // Set stores a key-value pair in the Redis cache with an expiration time.
 func (c *RedisCache) Set(key, value string) error {
-	// ctx := context.Background()
 	expiration := 24 * time.Hour // Adjust the expiration time as needed.
 
 	err := c.client.Set(key, value, expiration).Err()
