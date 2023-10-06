@@ -2,43 +2,56 @@ package controller
 
 import (
 	"errors"
-	"sync"
 )
 
-// Storage is an interface representing a data storage mechanism for URL mappings.
+// Storage defines an interface for storing and retrieving URL mappings.
 type Storage interface {
-	Save(shortURL, originalURL string) error
-	Retrieve(shortURL string) (string, error)
+	// StoreURLMapping stores a mapping between a short URL key and an original URL.
+	StoreURLMapping(shortURLKey, originalURL string) error
+
+	// RetrieveOriginalURL retrieves the original URL associated with a short URL key.
+	RetrieveOriginalURL(shortURLKey string) (string, error)
+
+	// RetrieveShortURL retrieves the short URL associated with an original URL.
+	RetrieveShortURL(originalURL string) (string, error)
 }
 
-// InMemoryStorage is an in-memory implementation of the Storage interface.
-type InMemoryStorage struct {
-	urlMap map[string]string // A map to store URL mappings (short URL to original URL).
-	mu     sync.RWMutex      // Mutex for concurrent access to the map.
+// MemoryStorage is an in-memory implementation of the Storage interface.
+type MemoryStorage struct {
+	urlMappings map[string]string // Map to store URL mappings.
 }
 
-// NewInMemoryStorage creates a new InMemoryStorage instance.
-func NewInMemoryStorage() *InMemoryStorage {
-	return &InMemoryStorage{
-		urlMap: make(map[string]string),
+// NewMemoryStorage creates a new MemoryStorage instance.
+func NewMemoryStorage() *MemoryStorage {
+	return &MemoryStorage{
+		urlMappings: make(map[string]string),
 	}
 }
 
-// Save stores the given short URL and its corresponding original URL.
-func (s *InMemoryStorage) Save(shortURL, originalURL string) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	s.urlMap[shortURL] = originalURL
+// StoreURLMapping stores a mapping between a short URL key and an original URL.
+func (s *MemoryStorage) StoreURLMapping(shortURLKey, originalURL string) error {
+	if _, exists := s.urlMappings[shortURLKey]; exists {
+		return errors.New("short URL key already exists")
+	}
+	s.urlMappings[shortURLKey] = originalURL
 	return nil
 }
 
-// Retrieve retrieves the original URL associated with the provided short URL.
-func (s *InMemoryStorage) Retrieve(shortURL string) (string, error) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	originalURL, exists := s.urlMap[shortURL]
+// RetrieveOriginalURL retrieves the original URL associated with a short URL key.
+func (s *MemoryStorage) RetrieveOriginalURL(shortURLKey string) (string, error) {
+	originalURL, exists := s.urlMappings[shortURLKey]
 	if !exists {
-		return "", errors.New("short URL not found")
+		return "", errors.New("short URL key not found")
 	}
 	return originalURL, nil
+}
+
+// RetrieveShortURL retrieves the short URL associated with an original URL.
+func (s *MemoryStorage) RetrieveShortURL(originalURL string) (string, error) {
+	for key, url := range s.urlMappings {
+		if url == originalURL {
+			return key, nil
+		}
+	}
+	return "", errors.New("original URL not found")
 }
