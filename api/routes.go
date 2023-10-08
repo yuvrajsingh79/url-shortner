@@ -1,8 +1,9 @@
 package api
 
 import (
-	"interview/url-shortner/controller"
 	"net/http"
+
+	"github.com/yuvrajsingh79/url-shortner/pkg/controller"
 
 	"github.com/gorilla/mux"
 )

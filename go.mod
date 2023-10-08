@@ -1,4 +1,4 @@
-module interview/url-shortner
+module github.com/yuvrajsingh79/url-shortner
 
 go 1.20
 

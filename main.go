@@ -1,14 +1,19 @@
 package main
 
 import (
-	"interview/url-shortner/api"
-	"interview/url-shortner/controller"
+	"flag"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/yuvrajsingh79/url-shortner/api"
+	"github.com/yuvrajsingh79/url-shortner/pkg/controller"
 )
 
+var httpAddr = flag.String("http.addr", ":8080", "HTTP Listen addresss")
+
 func main() {
+	//parse the flag
+	flag.Parse()
 	// Initialize the URL shortener with in-memory storage and Redis cache.
 	storage := controller.NewMemoryStorage()
 	redisCache, err := controller.NewRedisCache("my-redis-container:6379")
@@ -22,13 +27,8 @@ func main() {
 
 	http.Handle("/", router)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	log.Printf("Server is running on port %s...", port)
-	err = http.ListenAndServe(":"+port, nil)
+	log.Printf("Server is running on port %s...", *httpAddr)
+	err = http.ListenAndServe(*httpAddr, nil)
 	if err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
 	}

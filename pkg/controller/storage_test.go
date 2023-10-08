@@ -1,13 +1,12 @@
-package tests
+package controller
 
 import (
-	"interview/url-shortner/controller"
 	"testing"
 )
 
 func TestMemoryStorage_StoreAndRetrieve(t *testing.T) {
 	// Initialize a memory storage for testing.
-	memoryStorage := controller.NewMemoryStorage()
+	memoryStorage := NewMemoryStorage()
 
 	t.Run("StoreAndRetrieve_ValidData_ReturnsCorrectValue", func(t *testing.T) {
 		// Test storing and retrieving a URL mapping.

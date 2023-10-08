@@ -1,12 +1,12 @@
-package tests
+package api
 
 import (
-	"interview/url-shortner/api"
-	"interview/url-shortner/controller"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/yuvrajsingh79/url-shortner/pkg/controller"
 )
 
 func TestShortenURLHandler(t *testing.T) {
@@ -16,7 +16,7 @@ func TestShortenURLHandler(t *testing.T) {
 	shortener := controller.NewShortener(storage, cache)
 
 	// Create a test server with the API routes.
-	router := api.SetupRoutes(shortener)
+	router := SetupRoutes(shortener)
 	server := httptest.NewServer(router)
 	defer server.Close()
 

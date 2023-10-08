@@ -2,9 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"interview/url-shortner/controller"
 	"net/http"
 	"strings"
+
+	"github.com/yuvrajsingh79/url-shortner/pkg/controller"
 )
 
 // ShortenURLHandler handles the shortening of URLs.
