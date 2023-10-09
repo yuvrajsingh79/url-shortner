@@ -1,13 +1,12 @@
-package tests
+package controller
 
 import (
-	"interview/url-shortner/controller"
 	"testing"
 )
 
 func TestRedisCache_SetAndGet(t *testing.T) {
 	// Initialize a Redis cache for testing.
-	redisCache := controller.NewMockCache()
+	redisCache := NewMockCache()
 
 	t.Run("SetAndGet_ValidData_ReturnsCorrectValue", func(t *testing.T) {
 		// Test setting a key-value pair in the cache and retrieving it.
