@@ -25,72 +25,70 @@ Follow these steps to set up and run the URL shortener service:
 
 1. **Clone the Repository:**
 
-   ```bash
+```
    git clone https://github.com/yuvrajsingh79/url-shortner.git
    cd url-shortener
 ```
 
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/yuvrajsingh79/url-shortner.git
-   cd url-shortener
-```
-
-1. **Configuration:**
+2. **Configuration:**
 
      If you plan to use Redis for caching, update the Redis server address in the cache.go file:
 
-   ```bash
+```
    const redisAddr = "my-redis-container:6379"
 ```
 Ensure that `my-redis-container` matches the name of your Redis container.
 
-1. **Build and Run the Application:**
+3. **Build and Run the Application:**
 
 	To start the service, use the provided `setup.sh` script, which sets up a Redis container (if needed), make `setup.sh` as executable, builds the Go application, and runs it.
-   ```bash
+```
    chmod +x setup.sh
    cd url-shortener
 ```
 
-1. **Perform URL Shortening & verify Redirection:**
-
-	**Shorten a URL** :
+4. **Perform URL Shortening & verify Redirection:**
+   
+   **Shorten a URL** :
 	
-    Use the service to shorten a URL by sending a POST request to the /shorten endpoint. Replace <your-original-url> with the URL you want to shorten.
+   Use the service to shorten a URL by sending a POST request to the /shorten endpoint. Replace <your-original-url> with the URL you want to shorten.
 	
-   ```bash
+```
   curl -X POST -H "Content-Type: application/json" -d '{"url": "https://www.example.com"}' http://localhost:8080/shorten
 ```
-Response : {"short_url":"https://example.com/78dbdafd-1767-4832-ae45-f730991cb2f0"
+   Response will look like :
+    
+```
+ {"short_url":"https://example.com/78dbdafd-1767-4832-ae45-f730991cb2f0"}
+```
 
-	`78dbdafd-1767-4832-ae45-f730991cb2f0` is the short url that we store in memory.
-	Note: It does not allow duplicates.
+   `78dbdafd-1767-4832-ae45-f730991cb2f0` is the short url that we store in memory.
+   Note: It does not allow duplicates.
 	
-	**Test Redirection** :
+   **Test Redirection** :
 	
     To verify the redirection functionality, access the shortened URL in your web browser or use curl:
 	
-   ```bash
+```
   curl -i http://localhost:8080/78dbdafd-1767-4832-ae45-f730991cb2f0
 ```
-Reponse : 
-
-	`HTTP/1.1 303 See Other
+  Response : 
+```
+HTTP/1.1 303 See Other
 Content-Type: text/html; charset=utf-8
 Location: https://www.example.com
 Date: Sun, 08 Oct 2023 19:25:00 GMT
 Content-Length: 50
-<a href="https://www.example.com">See Other</a>`.
+<a href="https://www.example.com">See Other</a>
+```
 
 	`https://www.example.com` is the original URL that we retrived.
 
-1. **Testing:**
+5. **Testing:**
 
-	Run the tests to ensure the correctness of the service:
-   ```bash
-	go test ./...
+Run the tests to ensure the correctness of the service:
+```
+go test ./...
 ```
 
 ## Project Structure
